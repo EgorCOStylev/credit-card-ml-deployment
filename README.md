@@ -48,15 +48,17 @@ python app/api.py
 
 ## Docker
 
-```bash
-docker build -t k0stylev/credit-default-ml:latest .
-docker run -p 5000:5000 k0stylev/credit-default-ml:latest
-```
-
-Готовый образ на Docker Hub: [k0stylev/credit-default-ml](https://hub.docker.com/r/k0stylev/credit-default-ml)
+Docker Hub: [k0stylev/credit-default-ml](https://hub.docker.com/r/k0stylev/credit-default-ml)
 
 ```bash
 docker pull k0stylev/credit-default-ml:latest
+docker run -p 5000:5000 k0stylev/credit-default-ml:latest
+```
+
+Собрать локально:
+
+```bash
+docker build -t k0stylev/credit-default-ml:latest .
 docker run -p 5000:5000 k0stylev/credit-default-ml:latest
 ```
 
@@ -79,7 +81,7 @@ curl http://localhost:5000/health
 ```
 
 ```json
-{"status": "healthy", "timestamp": "2026-06-05T23:24:09Z"}
+{"status": "healthy", "timestamp": "2026-06-05T23:24:09.083043Z"}
 ```
 
 ### POST /predict
@@ -102,11 +104,24 @@ curl -X POST http://localhost:5000/predict?model=v1 \
 ```
 
 ```json
-{
-  "prediction": 1,
-  "probability": 0.7735,
-  "model_version": "v1"
-}
+{"model_version": "v1", "prediction": 1, "probability": 0.7735}
+```
+
+```bash
+curl -X POST http://localhost:5000/predict?model=v2 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "limit_bal": 20000, "sex": 2, "education": 2, "marriage": 1, "age": 24,
+    "pay_0": 2, "pay_2": 2, "pay_3": -1, "pay_4": -1, "pay_5": -1, "pay_6": -1,
+    "bill_amt1": 3913, "bill_amt2": 3102, "bill_amt3": 689,
+    "bill_amt4": 0, "bill_amt5": 0, "bill_amt6": 0,
+    "pay_amt1": 0, "pay_amt2": 689, "pay_amt3": 0,
+    "pay_amt4": 0, "pay_amt5": 0, "pay_amt6": 0
+  }'
+```
+
+```json
+{"model_version": "v2", "prediction": 1, "probability": 0.87}
 ```
 
 | поле | тип | описание |

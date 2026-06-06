@@ -21,7 +21,7 @@ from model_handler import predict, get_feature_names
 class JsonFormatter(logging.Formatter):
     def format(self, record):
         log_obj = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(datetime.timezone.utc).isoformat() + "Z",
             "level": record.levelname,
             "message": record.getMessage(),
         }
@@ -56,7 +56,7 @@ def _resolve_model_version() -> str:
 @app.route("/health", methods=["GET"])
 def health():
     """Health check endpoint."""
-    return jsonify({"status": "healthy", "timestamp": datetime.utcnow().isoformat() + "Z"}), 200
+    return jsonify({"status": "healthy", "timestamp": datetime.now(datetime.timezone.utc).isoformat() + "Z"}), 200
 
 
 @app.route("/features", methods=["GET"])
